@@ -1,0 +1,175 @@
+<!doctype html>
+<html class="tt-app">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Table for Spexy Students</title>
+  <meta name=description content="Time Table is a small application, that makes it easy to keep track of working times.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/dialog-polyfill.css">
+  <link rel="stylesheet" type="text/css" href="css/time-table.css">
+</head>
+<body class="tt-body">
+  <main class="tt-page">
+    <header class="tt-c-header">
+      <h1 class="tt-c-header__title">Spex Time Sheet</h1>
+    </header>
+
+    <section class="tt-section">
+      <form class="tt-c-userData">
+        <div class="tt-c-userData__inputLabelGroup">
+          <input class="tt-c-userData__input" type="text" id="TTNameSurname" placeholder="Name Surname" required>
+          <label class="tt-c-userData__label" for="TTNameSurname">Name Surname</label>
+        </div>
+        <div class="tt-c-userData__inputLabelGroup">
+          <input class="tt-c-userData__input" type="number" placeholder="9.00" min="9.00" max="30.00" step=".50" id="TTHourlyWage" required>
+          <label class="tt-c-userData__label" for="TTHourlyWage">€ / h</label>
+        </div>
+      </form>
+    </section>
+
+    <section class="tt-section tt-section--scrollable">
+      <div class="tt-c-scrollContainer"></div>
+    </section>
+
+    <section class="tt-section tt-section--highlight">
+      <div class="tt-c-sum">
+        <output id="TTHours">00.00 Hours</output> = <strong><output>00.00 €</output></strong>
+      </div>
+    </section>
+
+    <footer class="tt-section tt-section--centerText">
+      <div class="tt-grid tt-grid--horizontal">
+        <span>↺</span>
+        <button class="tt-button" onclick="document.querySelector('dialog').showModal()">＋</button>
+        <span>⎙</span>
+      </div>
+    </footer>
+  </main>
+
+  <dialog class="tt-dialog">
+    <form onsubmit="event.preventDefault(); document.querySelector('dialog').close()">
+      <header>
+        <h2 class="tt-heading">Your Day</h2>
+        <p class="tt-paragraph">Please fill in a day, your working hours and break time.</p>
+      </header>
+      <section class="tt-grid tt-grid--vertical">
+        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
+          <label class="tt-label" for="TTDay">Day</label>
+          <input class="tt-input" type="date" id="TTDay">
+        </div>
+        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
+          <label class="tt-label" for="TTStartTime">Start Time</label>
+          <input class="tt-input" type="time" value="09:00" id="TTStartTime">
+        </div>
+        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
+          <label class="tt-label" for="TTEndTime">End Time</label>
+          <input class="tt-input" type="time" value="18:00" id="TTEndTime">
+        </div>
+        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
+          <label class="tt-label" for="TTBreak">Break (hh:mm)</label>
+          <input class="tt-input" type="time" value="01:00" id="TTBreak">
+        </div>
+      </section>
+      <footer class="tt-grid tt-grid--horizontal">
+        <button class="tt-button" type="button" onclick="document.querySelector('dialog').close()">Cancel</button>
+        <button class="tt-button" type="submit">Add to Sheet</button>
+      </footer>
+    </form>
+  </dialog>
+
+   <!-- Polyfill for native dialog element -->
+  <script src="js/dialog-polyfill.js"></script>
+  <script>
+    var dialog = document.querySelector('dialog');
+    dialogPolyfill.registerDialog(dialog);
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+<!-- Example Table, may created dynamically based on from/to values -->
+<!-- Put it into tt-c-scrollcontainer -->
+
+          <!-- <table class="tt-table">
+              <tbody>
+              <tr>
+              <td class="tt-td">Monday, 2019-01-01</td>
+              <td class="tt-td">08:45 Hours</td>
+              </tr>
+              <tr class="inactive">
+              <td class="tt-td">Tuesday, 2019-01-02</td>
+              <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr class="inactive">
+              <td class="tt-td">Wednesday, 2019-01-04</td>
+              <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Thursday, 2019-01-05</td>
+              <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Friday, 2019-01-05</td>
+              <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Monday, 2019-01-01</td>
+              <td class="tt-td">08:45 Hours</td>
+              </tr>
+              <tr class="inactive">
+              <td class="tt-td">Tuesday, 2019-01-02</td>
+              <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr class="inactive">
+              <td class="tt-td">Wednesday, 2019-01-04</td>
+              <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Thursday, 2019-01-05</td>
+              <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Friday, 2019-01-05</td>
+              <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+              <td class="tt-td">Monday, 2019-01-01</td>
+              <td class="tt-td">08:45 Hours</td>
+              </tr>
+              <tr class="inactive">
+              <td class="tt-td">Tuesday, 2019-01-02</td>
+              <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr class="inactive">
+                <td class="tt-td">Wednesday, 2019-01-04</td>
+                <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr>
+                <td class="tt-td">Thursday, 2019-01-05</td>
+                <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+                <td class="tt-td">Friday, 2019-01-05</td>
+                <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+                <td class="tt-td">Monday, 2019-01-01</td>
+                <td class="tt-td">08:45 Hours</td>
+              </tr>
+              <tr class="inactive">
+                <td class="tt-td">Tuesday, 2019-01-02</td>
+                <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr class="inactive">
+                <td class="tt-td">Wednesday, 2019-01-04</td>
+                <td class="tt-td">00:00 Hours</td>
+              </tr>
+              <tr>
+                <td class="tt-td">Thursday, 2019-01-05</td>
+                <td class="tt-td">07:00 Hours</td>
+              </tr>
+              <tr>
+                <td class="tt-td">Friday, 2019-01-05</td>
+                <td class="tt-td">07:00 Hours</td>
+              </tr>
+              </tbody>
+              </table> -->
