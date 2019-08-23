@@ -1,7 +1,7 @@
-const model = {
+let model = {
     company: 'Mister Spex',
     name: '',
-    salaray: 0,
+    salary: 0,
     list: [
         {
             day: '',
@@ -16,32 +16,44 @@ const hours = 8.0;
 
 const heading = document.querySelector('h1');
 const nameField = document.querySelector('#TTNameSurname');
+const salaryField = document.querySelector('#TTHourlyWage');
 const appOutput = document.querySelector('#TTHours');
 
 const render = (model) => {
-    heading.innerText = `${model.company} Time Sheet${model.name !== '' ? ` for ${model.name}` : ''}`;
+    heading.innerText = `${model.company} Time Sheet ${model.name}`;
+    nameField.value = model.name
+    salaryField.value = model.salary
     appOutput.innerText = `${hours} Hours`;
 };
 
 const onNameFieldChanged = (event) => {
     const newName = event.target.value;
     model.name = newName;
+
+    localStorage.setItem('myData', JSON.stringify(model))
     console.log(`name field was changed to ${newName}`);
     render(model);
 };
 
 const onSalaryFieldChanged = (event) => {
-    const newSalaray = event.target.value;
-    model.salaray = newSalaray;
-    console.log(`salary field was changed to ${newSalaray}`);
+    const newSalary = event.target.value;
+    model.salary = newSalary;
+
+    localStorage.setItem('myData', JSON.stringify(model))
+    console.log(`salary field was changed to ${newSalary}`);
     render(model);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Hello, Mister Spex!');
-    console.log(`Heading is ${heading.innerText}.`);
+    const myData = localStorage.getItem('myData')
+
+    if(myData !== null) {
+        model = JSON.parse(myData)
+    }
 
     nameField.addEventListener('keyup', onNameFieldChanged);
+    salaryField.addEventListener('keyup', onSalaryFieldChanged)
 
     render(model);
 });
