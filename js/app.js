@@ -4,26 +4,47 @@ let model = {
     salary: 0,
     list: [
         {
-            day: '',
-            startTime: '',
-            endTime: '',
-            breakDuration: ''
+            day: '2019-08-20',
+            startTime: 8,
+            endTime: 17,
+            breakDuration: 1
+        },
+        {
+            day: '2019-08-25',
+            startTime: 10,
+            endTime: 21,
+            breakDuration: 2
+        },
+        {
+            day: '2019-08-29',
+            startTime: 9,
+            endTime: 15,
+            breakDuration: 0.5
         }
     ]
 };
 
 const hours = 8.0;
+let monthlySalary = 0;
 
 const heading = document.querySelector('h1');
 const nameField = document.querySelector('#TTNameSurname');
 const salaryField = document.querySelector('#TTHourlyWage');
 const appOutput = document.querySelector('#TTHours');
+const monthlySalaryOutput = document.querySelector('#TTMonthlySalary');
+const scrollContainer = document.querySelector('.tt-c-scrollContainer');
+
+const calculate = () => {
+    monthlySalary = hours * model.salary;
+};
 
 const render = (model) => {
     heading.innerText = `${model.company} Time Sheet ${model.name}`;
     nameField.value = model.name
     salaryField.value = model.salary
     appOutput.innerText = `${hours} Hours`;
+    monthlySalaryOutput.innerText = `${monthlySalary} €`;
+    scrollContainer.innerHTML = '<b>This will be my table.</b>';
 };
 
 const onNameFieldChanged = (event) => {
@@ -41,6 +62,7 @@ const onSalaryFieldChanged = (event) => {
 
     localStorage.setItem('myData', JSON.stringify(model))
     console.log(`salary field was changed to ${newSalary}`);
+    calculate();
     render(model);
 };
 
@@ -55,5 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     nameField.addEventListener('keyup', onNameFieldChanged);
     salaryField.addEventListener('keyup', onSalaryFieldChanged)
 
+    calculate();
     render(model);
 });
