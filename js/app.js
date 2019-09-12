@@ -38,13 +38,24 @@ const calculate = () => {
     monthlySalary = hours * model.salary;
 };
 
+const convertListIntoTable = (acc, value) => {
+    const hours = value.endTime - value.startTime - value.breakDuration;
+    return `${acc}<tr><td>${value.day}</td><td>${hours} Hours</td></tr>`
+}
+
+
 const render = (model) => {
+    const tableHTMLString = model.list.reduce(convertListIntoTable, '<table><tbody>') + '</tbody></table>';
+
     heading.innerText = `${model.company} Time Sheet ${model.name}`;
     nameField.value = model.name
     salaryField.value = model.salary
     appOutput.innerText = `${hours} Hours`;
     monthlySalaryOutput.innerText = `${monthlySalary} €`;
-    scrollContainer.innerHTML = '<b>This will be my table.</b>';
+
+
+
+    scrollContainer.innerHTML = tableHTMLString;
 };
 
 const onNameFieldChanged = (event) => {
