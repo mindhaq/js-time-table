@@ -24,7 +24,7 @@ let model = {
     ]
 };
 
-const hours = 8.0;
+let hours = 8.0;
 let monthlySalary = 0;
 
 const heading = document.querySelector('h1');
@@ -33,8 +33,12 @@ const salaryField = document.querySelector('#TTHourlyWage');
 const appOutput = document.querySelector('#TTHours');
 const monthlySalaryOutput = document.querySelector('#TTMonthlySalary');
 const scrollContainer = document.querySelector('.tt-c-scrollContainer');
+const ttDialog = document.querySelector('dialog');
+const openDialogButton = document.querySelector('button.tt-button--opendialog');
+const ttForm = document.querySelector('dialog form');
 
 const calculate = () => {
+    
     monthlySalary = hours * model.salary;
 };
 
@@ -77,6 +81,37 @@ const onSalaryFieldChanged = (event) => {
     render(model);
 };
 
+const extractHour = time => parseInt(time.split(':')[0]);
+
+const onDialogClosed = () => {
+    const returnValue = ttDialog.returnValue;
+    console.log(`Dialog was closed with ${returnValue}.`);
+    if (returnValue !== 'add') {
+        return;
+    }
+
+    const formData = new FormData(ttForm);
+    const day = formData.get('TTDay');
+    const breakDuration = extractHour(formData.get('TTBreak'));
+    const startTime = extractHour(formData.get('TTStartTime'));
+    const endTime = extractHour(formData.get('TTEndTime'));
+
+    const newEntry = {
+        day,
+        startTime,
+        endTime,
+        breakDuration
+    };
+
+    console.log('Adding new timetable entry.');
+    console.log(newEntry);
+
+    model.list.push(newEntry);
+    localStorage.setItem('myData', JSON.stringify(model))
+    calculate();
+    render(model);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Hello, Mister Spex!');
     const myData = localStorage.getItem('myData')
@@ -86,7 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     nameField.addEventListener('keyup', onNameFieldChanged);
-    salaryField.addEventListener('keyup', onSalaryFieldChanged)
+    salaryField.addEventListener('keyup', onSalaryFieldChanged);
+    openDialogButton.addEventListener('click', () => {
+        ttDialog.showModal();
+    });
+    ttDialog.addEventListener('close', onDialogClosed);
 
     calculate();
     render(model);
