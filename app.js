@@ -110,7 +110,6 @@ const onSalaryFieldChanged = (event) => {
 
     localStorage.setItem('myData', JSON.stringify(model))
     console.log(`salary field was changed to ${newSalary}`);
-    calculate();
     render(model);
 };
 
