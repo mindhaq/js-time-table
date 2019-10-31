@@ -1,175 +1,162 @@
 <!doctype html>
-<html class="tt-app">
-<head>
-  <meta charset="UTF-8">
-  <title>Time Table for Spexy Students</title>
-  <meta name=description content="Time Table is a small application, that makes it easy to keep track of working times.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="css/dialog-polyfill.css">
-  <link rel="stylesheet" type="text/css" href="css/time-table.css">
-</head>
-<body class="tt-body">
-  <main class="tt-page">
-    <header class="tt-c-header">
-      <h1 class="tt-c-header__title">Spex Time Sheet</h1>
-    </header>
-
-    <section class="tt-section">
-      <form class="tt-c-userData">
-        <div class="tt-c-userData__inputLabelGroup">
-          <input class="tt-c-userData__input" type="text" id="TTNameSurname" placeholder="Name Surname" required>
-          <label class="tt-c-userData__label" for="TTNameSurname">Name Surname</label>
-        </div>
-        <div class="tt-c-userData__inputLabelGroup">
-          <input class="tt-c-userData__input" type="number" placeholder="9.00" min="9.00" max="30.00" step=".50" id="TTHourlyWage" required>
-          <label class="tt-c-userData__label" for="TTHourlyWage">€ / h</label>
-        </div>
-      </form>
-    </section>
-
-    <section class="tt-section tt-section--scrollable">
-      <div class="tt-c-scrollContainer"></div>
-    </section>
-
-    <section class="tt-section tt-section--highlight">
-      <div class="tt-c-sum">
-        <output id="TTHours">00.00 Hours</output> = <strong><output id="TTMonthlySalary">00.00 €</output></strong>
-      </div>
-    </section>
-
-    <footer class="tt-section tt-section--centerText">
-      <div class="tt-grid tt-grid--horizontal">
-        <button id="clearButton">↺</button>
-        <button class="tt-button tt-button--opendialog">＋</button>
-        <span>⎙</span>
-      </div>
-    </footer>
-  </main>
-
-  <dialog class="tt-dialog">
-    <form method="dialog">
-      <header>
-        <h2 class="tt-heading">Your Day</h2>
-        <p class="tt-paragraph">Please fill in a day, your working hours and break time.</p>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Time Table for Students at Mister Spex</title>
+    <meta name=description content="Time Table is a small browser application, that makes it easy to keep track of working times.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/variables/font.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/variables/spacings.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/reset.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/body.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/layout.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/header.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/content.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/page/footer.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/typography/typography.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/components/button.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="css/components/table.css" media="screen">
+    <script src="js/polyfills.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/deferredStyling.js" defer></script>
+  </head>
+  <body class="tt-body">
+    <div class="tt-page">
+      <header class="tt-header">
+        <svg class="tt-header__logo" alt="Mister Spex - Logo" viewBox="0 0 500 100" preserveAspectRatio="xMidYMid meet" id="icon--msxlogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+          <mask id="icon--msxlogo__mask" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+            <path fill="white" d="m0,6 c30,-6 70,-6 100,0 v88 c-30,6 -70,6 -100,0 z" id="icon--msxlogo__shape" stroke-width="0"></path>
+            <path stroke="black" stroke-width="5px" d="m0,26 c80,0 27,48 100,48" id="icon--msxlogo__path" fill="transparent"></path>
+            <use href="#icon--msxlogo__path" style="transform-origin: 50px 50px; transform: scale(-1, 1);"></use>
+            <use href="#icon--msxlogo__path" style="transform-origin: 50px 50px; transform: scale(-1, -1);"></use>
+            <use href="#icon--msxlogo__path" style="transform-origin: 50px 50px; transform: scale(1, -1);"></use>
+          </mask>
+          <path d="m0,0h100v100h-100z" mask="url(#icon--msxlogo__mask)" fill="currentColor"></path>
+          <text x="120" y="74" font-size="68px" style="font-family: var(--🌐font-family); fill: currentColor; text-transform: uppercase">Time Table</text>
+        </svg>
+        <h1 class="tt-header__title">Spex Time Sheet</h1>
+        <nav class="tt-header__slot-buttons">
+          <button class="tt-button tt-button--sm tt-button--blind tt-button--decent tt-button--vertical" onclick="document.querySelectorAll('dialog')[1].showModal()">
+            <div class="tt-button__inner">
+              <svg class="tt-button__icon" width="1em" height="1em">
+                <use href="#icon--customer"></use>
+              </svg>
+              <span class="tt-button__text">Edit</span>
+            </div>
+          </button>
+        </nav>
       </header>
-      <section class="tt-grid tt-grid--vertical">
-        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
-          <label class="tt-label" for="TTDay">Day</label>
-          <input class="tt-input" type="date" id="TTDay" name="TTDay" required>
-        </div>
-        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
-          <label class="tt-label" for="TTStartTime">Start Time</label>
-          <input class="tt-input" type="time" id="TTStartTime" name="TTStartTime" required>
-        </div>
-        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
-          <label class="tt-label" for="TTEndTime">End Time</label>
-          <input class="tt-input" type="time" id="TTEndTime" name="TTEndTime" required>
-        </div>
-        <div class="tt-grid tt-grid--horizontal tt-grid--spacingTight">
-          <label class="tt-label" for="TTBreak">Break (hh:mm)</label>
-          <input class="tt-input" type="time" id="TTBreak" name="TTBreak" required>
-        </div>
-      </section>
-      <footer class="tt-grid tt-grid--horizontal">
-        <button class="tt-button tt-button--closedialog" type="button" value="cancel">Cancel</button>
-        <button class="tt-button tt-button--add" type="submit" value="add">Add to Sheet</button>
+      <main class="tt-content">
+        <header class="tt-content__header">
+          <h2 class="tt-heading">Working Hours</h2>
+          <div>
+            <output id="TTHours">00.00 Hours</output>
+            <output id="TTMonthlySalary">00.00 €</output>
+          </div>
+        </header>
+        <section class="tt-content__scrollable">
+          <div class="tt-c-scrollContainer"></div>
+        </section>
+        <footer class="tt-content__footer">
+          <button class="tt-button tt-button--primary tt-button--opendialog">
+            <div class="tt-button__inner">
+              <svg class="tt-button__icon">
+                <use href="#icon--plus"></use>
+              </svg>
+            </div>
+          </button>
+        </footer>
+      </main>
+      <footer class="tt-footer">
+        <button class="tt-button tt-button--sm tt-button--blind tt-button--decent" id="clearButton">
+          <div class="tt-button__inner">
+            <span class="tt-button__text">Clear</span>
+          </div>
+        </button>
+        <button class="tt-button tt-button--sm tt-button--blind tt-button--decent">
+          <div class="tt-button__inner">
+            <span class="tt-button__text">Download</span>
+          </div>
+        </button>
+        <button class="tt-button tt-button--sm tt-button--blind tt-button--decent">
+          <div class="tt-button__inner">
+            <span class="tt-button__text">Upload</span>
+          </div>
+        </button>
+        <button class="tt-button tt-button--sm tt-button--blind tt-button--secondary" id="TTPrintButton">
+          <div class="tt-button__inner">
+            <span class="tt-button__text">Print</span>
+          </div>
+        </button>
       </footer>
-    </form>
-  </dialog>
-
-   <!-- Polyfill for native dialog element -->
-  <script src="js/dialog-polyfill.js"></script>
-  <script>
-    var dialog = document.querySelector('dialog');
-    dialogPolyfill.registerDialog(dialog);
-  </script>
-  <script src="js/app.js"></script>
-</body>
+    </div>
+    <!-- Time Table Form -->
+    <dialog class="tt-dialog">
+      <form class="tt-form" method="dialog">
+        <header class="tt-form__header">
+          <h2 class="tt-heading">Your Day</h2>
+          <p class="tt-paragraph">Please fill in a day, your working hours and break time.</p>
+        </header>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="date" id="TTDay" name="TTDay" required>
+          <label class="tt-form__label" for="TTDay" data-validity-message="Please fill in the date">Day</label>
+        </div>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="time" id="TTStartTime" name="TTStartTime" required>
+          <label class="tt-form__label" for="TTStartTime" data-validity-message="Please fill in the start time">Start Time</label>
+        </div>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="time" id="TTEndTime" name="TTEndTime" required>
+          <label class="tt-form__label" for="TTEndTime" data-validity-message="Please fill in the end time">End Time</label>
+        </div>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="time" id="TTBreak" name="TTBreak" required>
+          <label class="tt-form__label" for="TTBreak" data-validity-message="Please fill in the break time">Break (hh:mm)</label>
+        </div>
+        <section class="tt-form__slot-buttons">
+          <button class="tt-button tt-button--blind tt-button--decent tt-button--closedialog" type="button" value="cancel">
+            <span class="tt-button__inner">Cancel</span>
+          </button>
+          <button class="tt-button tt-button--secondary tt-button--add" type="submit" value="add">
+            <span class="tt-button__inner">Add to Sheet</span>
+          </button>
+        </section>
+      </form>
+    </dialog>
+    <!-- Account Settings Form -->
+    <dialog class="tt-dialog">
+      <form class="tt-form" method="dialog">
+        <header class="tt-form__header">
+          <h2 class="tt-heading">Account Settings</h2>
+          <p class="tt-paragraph">Please fill in your full name and salary.</p>
+        </header>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="text" id="TTNameSurname" placeholder="Name Surname" spellcheck="false" autocomplete="name" required>
+          <label class="tt-form__label" for="TTNameSurname" data-validity-message="Please fill in">Your Full Name</label>
+        </div>
+        <div class="tt-form__inputLabelGroup">
+          <input class="tt-form__input" type="number" placeholder="9.00" min="9.00" max="30.00" step=".50" id="TTHourlyWage" required>
+          <label class="tt-form__label" for="TTHourlyWage" data-validity-message="Please enter a number between 9.0 and 30.0">You Hourly Wage (€ per hour)</label>
+        </div>
+        <section class="tt-form__slot-buttons">
+          <button class="tt-button tt-button--blind tt-button--decent" type="button" onclick="this.closest('dialog').close();">
+            <span class="tt-button__inner">Cancel</span>
+          </button>
+          <button class="tt-button tt-button--secondary" type="submit">
+            <span class="tt-button__inner">Close</span>
+          </button>
+        </section>
+      </form>
+    </dialog>
+    <!-- Icon Symbols -->
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width: 0; height: 0; position: absolute; bottom: 0; right: 0;">
+      <symbol viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" id="icon--customer">
+        <path fill="currentColor" d="M 47.5 25 m -20, 0 a20,20 0 1,0 40,0 a 20,20 0 1,0 -40,0"></path>
+        <path fill="currentColor" d="M 0 100 C0,50 100,50 100,100z"></path>
+      </symbol>
+      <symbol viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" id="icon--plus">
+        <path fill="transparent" stroke="currentColor" stroke-width="10px" stroke-linecap="round" stroke-linejoin="round" d="m50 10 v80 m-40 -40h80"></path>
+      </symbol>
+    </svg>
+  </body>
 </html>
-<!-- Example Table, may created dynamically based on from/to values -->
-<!-- Put it into tt-c-scrollcontainer -->
-
-          <!-- <table class="tt-table">
-              <tbody>
-              <tr>
-              <td class="tt-td">Monday, 2019-01-01</td>
-              <td class="tt-td">08:45 Hours</td>
-              </tr>
-              <tr class="inactive">
-              <td class="tt-td">Tuesday, 2019-01-02</td>
-              <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr class="inactive">
-              <td class="tt-td">Wednesday, 2019-01-04</td>
-              <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Thursday, 2019-01-05</td>
-              <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Friday, 2019-01-05</td>
-              <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Monday, 2019-01-01</td>
-              <td class="tt-td">08:45 Hours</td>
-              </tr>
-              <tr class="inactive">
-              <td class="tt-td">Tuesday, 2019-01-02</td>
-              <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr class="inactive">
-              <td class="tt-td">Wednesday, 2019-01-04</td>
-              <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Thursday, 2019-01-05</td>
-              <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Friday, 2019-01-05</td>
-              <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-              <td class="tt-td">Monday, 2019-01-01</td>
-              <td class="tt-td">08:45 Hours</td>
-              </tr>
-              <tr class="inactive">
-              <td class="tt-td">Tuesday, 2019-01-02</td>
-              <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr class="inactive">
-                <td class="tt-td">Wednesday, 2019-01-04</td>
-                <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr>
-                <td class="tt-td">Thursday, 2019-01-05</td>
-                <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-                <td class="tt-td">Friday, 2019-01-05</td>
-                <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-                <td class="tt-td">Monday, 2019-01-01</td>
-                <td class="tt-td">08:45 Hours</td>
-              </tr>
-              <tr class="inactive">
-                <td class="tt-td">Tuesday, 2019-01-02</td>
-                <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr class="inactive">
-                <td class="tt-td">Wednesday, 2019-01-04</td>
-                <td class="tt-td">00:00 Hours</td>
-              </tr>
-              <tr>
-                <td class="tt-td">Thursday, 2019-01-05</td>
-                <td class="tt-td">07:00 Hours</td>
-              </tr>
-              <tr>
-                <td class="tt-td">Friday, 2019-01-05</td>
-                <td class="tt-td">07:00 Hours</td>
-              </tr>
-              </tbody>
-              </table> -->
