@@ -1,0 +1,4 @@
+.tt-content {
+  --page\padding: 0 var(--🌐spacing--xl);
+  --page\margin: 0 calc(20vw - var(--🌐spacing--xl));
+}

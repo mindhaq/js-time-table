@@ -1,0 +1,43 @@
+/*
+Dialog
+
+Native dialogs are amazing. The dialog acts as a container for any content you'd like to show.
+Note: Closing and opening are not part of the dialog itself. Add your own!
+
+Markup:
+<button class="tt-button" onclick="this.nextElementSibling.showModal()">Open Dialog</button>
+<dialog class="tt-dialog">
+  <p class="tt-paragraph">Lorem ipsum dolor sit amet ... eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+</dialog>
+
+Styleguide Components.Dialog
+*/
+
+/* Setup */
+.tt-dialog {
+  --tt-dialog\backgroundColor: var(--🌐color-surface);
+  --tt-dialog\color: var(--🌐color-on-surface);
+  --tt-dialog\borderTopColor: var(--🌐color-primary, transparent);
+  --tt-dialog\borderTopWidth: var(--🌐spacing);
+  --tt-dialog\borderRadius: calc(var(--tt-dialog\borderTopWidth) / 2);
+  --tt-dialog\filter: var(--🌐filter-shadow);
+  --tt-dialog\padding: var(--🌐spacing) var(--🌐spacing--sm) var(--🌐spacing--lg);
+  --tt-dialog\width: calc(100% - 2 * var(--🌐spacing--sm));
+}
+
+/* Layout and design */
+.tt-dialog {
+  background-color: var(--tt-dialog\backgroundColor);
+  border: 0;
+  border-radius: var(--tt-dialog\borderRadius);
+  border-top: solid var(--tt-dialog\borderTopWidth) var(--tt-dialog\borderTopColor);
+  color: var(--tt-dialog\color);
+  filter: var(--tt-dialog\filter);
+  padding: var(--tt-dialog\padding);
+  width: var(--tt-dialog\width);
+}
+  .tt-dialog::backdrop {
+    /* Backdrops don't accept css custom properties :( */
+    backdrop-filter: blur(2px) grayscale(1);
+    background-color: #0006;
+  }

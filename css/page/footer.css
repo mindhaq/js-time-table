@@ -1,0 +1,30 @@
+/*
+Footer
+
+The footer is just a simple grid for some buttons
+
+Markup:
+<footer class="tt-footer">
+  <span>Item</span>
+  <span>Item</span>
+  <span>Item</span>
+  <span>Item</span>
+</footer>
+
+Styleguide Page.Footer
+*/
+
+/* Setup */
+.tt-footer {
+  --footer\background: var(--🌐color-background);
+  --footer\padding: var(--🌐spacing--xs) 0;
+}
+
+/* Layout and design */
+.tt-footer {
+  background-color: var(--footer\background);
+  display: grid;
+  grid-auto-flow: column;
+  grid-area: footer;
+  padding: var(--footer\padding);
+}

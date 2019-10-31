@@ -1,0 +1,46 @@
+.tt-body {
+  font-family: Roboto;
+  font-size: 14pt;
+}
+.tt-page {
+  box-sizing: border-box;
+  padding: 6mm;
+}
+.tt-header__logo {
+  width: 50mm;
+  margin: 0 0 2rem;
+}
+
+h1 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin: 0 0 1em;
+}
+h2 {
+  font-size: 1rem;
+  margin: 0 0 1em;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 3rem;
+  min-width: 120mm;
+}
+
+td {
+  border: solid 1px #aaa;
+  font-size: 1rem;
+  padding: .5em 1em;
+}
+.tt-header__slot-navbar,
+.tt-content__footer,
+.tt-footer {
+  display: none;
+}
+
+table::after {
+  content: '_______________________________                   _______________________________\A Date, Student Name                                        Date, Lead Name';
+  display: block;
+  margin-top: 30mm;
+  white-space: pre;
+}
