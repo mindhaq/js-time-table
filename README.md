@@ -1,4 +1,7 @@
-# js-time-table
+# Time Sheet
+
+Student Time Sheet is a small browser application, that makes it easy to keep track of working times.
+It's created by working students for working students at Mister Spex.
 
 Deployment:
 https://mindhaq.github.io/js-time-table/time-table.html
@@ -20,7 +23,9 @@ https://mindhaq.github.io/js-time-table/time-table.html
 * JSON
   * stringify, parse
 * Arrays
-  * map, reduce
+  * map
+  * reduce
+  * sort
 * HTMLElement
   * innerText, innerHTML
   * valueAsNumber
