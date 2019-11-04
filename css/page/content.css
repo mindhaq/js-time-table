@@ -5,14 +5,14 @@ The content layout is an heavily customized grid with a couple of properties for
 It comes with one header, one scroll-container and one absolute positioned footer
 
 Markup:
-<main class="tt-content">
-  <header class="tt-content__header">
-    <h2 class="tt-heading">Header</h2>
+<main class="t-content">
+  <header class="t-content__header">
+    <h2 class="t-heading">Header</h2>
   </header>
-  <section class="tt-content__scrollable">
+  <section class="t-content__scrollable">
     (Scrollable) Content
   </section>
-  <footer class="tt-content__footer">
+  <footer class="t-content__footer">
     Footer
   </footer>
 </main>
@@ -21,42 +21,23 @@ Styleguide Page.Content
 */
 
 /* Setup */
-.tt-content {
+.t-content {
   --page\padding: 0;
   --page\margin: 0;
 }
-.tt-content__footer {
-}
 
 /* Layout and design */
-.tt-content {
+.t-content {
   display: grid; /* for height filling scrollable */
   grid-area: content;
-  grid-template-rows: auto 1fr;
   margin: var(--page\margin);
   overflow: hidden; /* for height filling scrollable */
   padding: var(--page\padding);
   position: relative; /* for fixed content__footer position*/
 }
-  .tt-content__header {
-    padding: var(--🌐spacing);
-  }
-  .tt-content__footer {
-    padding: var(--🌐spacing);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    backdrop-filter: brightness(0.9) blur(2px);
-    width: 100%;
-    display: flex;
-    filter: var(--🌐filter-shadow);
-    justify-content: center;
-  }
-  .tt-content__scrollable {
+  .t-content__scrollable {
+    align-content: space-between;
     display: grid;
-    overflow: hidden;
+    overflow-y: auto;
     padding: 0;
   }
-
-  /* bad naming - needs refactoring and breaking change in js, html and css */
-  .tt-c-scrollContainer {overflow-y: auto;}

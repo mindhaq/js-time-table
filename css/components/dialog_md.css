@@ -1,4 +1,4 @@
-.tt-dialog {
-  --tt-dialog\padding: var(--🌐spacing--lg);
-  --tt-dialog\width: calc(62.8% - 2 * var(--🌐spacing--sm));
+.📅dialog {
+  --📅dialog\padding: var(--🌐spacing--lg);
+  --📅dialog\width: calc(62.8% - 2 * var(--🌐spacing--sm));
 }

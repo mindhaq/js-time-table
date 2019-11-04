@@ -6,15 +6,15 @@ Besides the page-container it contains hidden dialog modals and the icons in a s
 
 Markup:
 
-<body class="tt-body">
-  <p class="tt-paragraph">Place the page-container, dialogs and svg-icons here.</p>
+<body class="t-body">
+  <p class="t-paragraph">Place the page-container, dialogs and svg-icons here.</p>
 </body>
 
 Styleguide Page.Body
 */
 
 /* Settings */
-.tt-body {
+.t-body {
   --body\background: var(--🌐color-background);
   --body\color: var(--🌐color-text);
   --body\font: var(--🌐fontSize)/var(--🌐fontSize\lineHeight) var(--🌐font-family);
@@ -22,7 +22,7 @@ Styleguide Page.Body
 }
 
 /* Layout and design */
-.tt-body {
+.t-body {
   background-color: var(--body\background);
   color: var(--body\color);
   font: var(--body\font);

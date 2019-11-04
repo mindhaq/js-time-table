@@ -17,7 +17,7 @@ No styleguide reference.
 */
 :root {
  --🌐color-background: var(--🎨transparent-black--bright);
- --🌐color-background--hightlight: var(--🎨transparent-black--bright);
+ --🌐color-background--highlight: var(--🎨transparent-black--bright);
 
  --🌐color-surface: var(--🎨white);
  --🌐color-on-surface: var(--🎨black);

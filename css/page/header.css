@@ -10,14 +10,14 @@ Styleguide Page.Header
 */
 
 /* Setup */
-.tt-header {
+.t-header {
   --header\padding: var(--🌐spacing) calc(var(--🌐spacing) - var(--🌐spacing--xs)) 0 var(--🌐spacing);
   --header\logoHeight: var(--🌐fontSize--xl);
 }
 
 /* Layout and design*/
-.tt-header {
-  align-items: center;
+.t-header {
+  align-items: start;
   background-color: var(--🌐color-surface);
   display: grid;
   grid-area: header;
@@ -29,13 +29,13 @@ Styleguide Page.Header
   border-top: solid var(--🌐spacing--sm) var(--🌐color-primary, transparent);
 }
 
-.tt-header__logo {
+.t-header__logo {
   grid-area: logo;
   height: var(--header\logoHeight);
   width: calc(5 * var(--header\logoHeight));
 }
 
-.tt-header__title {
+.t-header__title {
   color: var(--🌐color-text--decent);
   font-size: var(--🌐fontSize--sm);
   font-weight: var(--🌐fontWeight);
@@ -44,6 +44,9 @@ Styleguide Page.Header
   margin-bottom: var(--🌐spacing--xs);
 }
 
-.tt-header__slot-buttons {
+.t-header__slot-buttons {
+  display: grid;
   grid-area: navbar;
+  grid-auto-flow: column;
+  grid-gap: var(--🌐spacing--sm);
 }

@@ -1,14 +1,14 @@
-.tt-body {
+.t-body {
   font-family: Roboto;
-  font-size: 14pt;
+  font-size: 12pt;
 }
-.tt-page {
+.t-page {
   box-sizing: border-box;
   padding: 6mm;
 }
-.tt-header__logo {
+.t-header__logo {
   width: 50mm;
-  margin: 0 0 2rem;
+  margin: 0 0 1pt;
 }
 
 h1 {
@@ -23,22 +23,21 @@ h2 {
 
 table {
   border-collapse: collapse;
+  font-size: 7pt;
   margin-bottom: 3rem;
   min-width: 120mm;
 }
 
 td {
   border: solid 1px #aaa;
-  font-size: 1rem;
   padding: .5em 1em;
 }
-.tt-header__slot-navbar,
-.tt-content__footer,
-.tt-footer {
+.t-header__slot-buttons,
+.t-navbar {
   display: none;
 }
 
-table::after {
+.t-footer::after {
   content: '_______________________________                   _______________________________\A Date, Student Name                                        Date, Lead Name';
   display: block;
   margin-top: 30mm;
