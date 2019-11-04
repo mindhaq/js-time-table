@@ -1,4 +1,4 @@
-.📅dialog {
-  --📅dialog\padding: var(--🌐spacing--lg);
-  --📅dialog\width: calc(62.8% - 2 * var(--🌐spacing--sm));
+.t-dialog {
+  --t.dialog\padding: var(--🌐spacing--lg);
+  --t-dialog\width: calc(62.8% - 2 * var(--🌐spacing--sm));
 }
