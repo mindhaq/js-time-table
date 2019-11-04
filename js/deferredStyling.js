@@ -1,67 +1,42 @@
 (function() {
-  const deferredStyles = [
-    {
-      path: 'css/variables/palette.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/variables/filters.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/variables/transitions.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/themes/theme-light.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/themes/theme-dark.css',
-      media: 'screen and (prefers-color-scheme:dark)',
-    },
-    {
-      path: 'css/components/dialog.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/components/dialog_md.css',
-      media: 'screen and (min-width:568px)',
-    },
-    {
-      path: 'css/components/form.css',
-      media: 'screen',
-    },
-    {
-      path: 'css/components/form_md.css',
-      media: 'screen and (min-width:568px)',
-    },
-    {
-      path: 'css/page/page-print.css',
-      media: 'print',
-    },
-    {
-      path: 'css/page/body_lg.css',
-      media: 'screen and (min-width:1024px)',
-    },
-    {
-      path: 'css/page/footer_md.css',
-      media: 'screen and (min-width:568px)',
-    },
-    {
-      path: 'css/page/header_lg.css',
-      media: 'screen and (min-width:1024px)',
-    },
-    {
-      path: 'css/page/content_lg.css',
-      media: 'screen and (min-width:1024px)',
-    },
-    {
-      path: 'css/components/table_md.css',
-      media: 'screen and (min-width:568px)',
-    },
-  ];
+  const breakPoints = {
+    "md": "568px" ,
+    "lg": "1024px"
+  };
+
+  const deferredStyles = {
+    "screen": [
+      'css/variables/palette.css',
+      'css/variables/filters.css',
+      'css/variables/times.css',
+      'css/themes/theme-light.css',
+      'css/components/dialog.css',
+      'css/components/form.css'
+    ],
+    "screen_md": [
+      'css/components/dialog_md.css',
+      'css/components/form_md.css',
+    ],
+    "screen_lg": [
+      'css/page/header_lg.css',
+      'css/page/navbar_lg.css',
+      'css/page/content_lg.css',
+      'css/page/footer_lg.css'
+    ],
+    "theme_print": 'css/page/page-print.css',
+    "theme_dark": 'css/themes/theme-dark.css'
+  };
+
+  const addStyleSheetToHead = (href, media) => {
+    const styleHTML = `<link rel="stylesheet" type="text/css" href="${href}" media="${media}">`;
+    document.head.insertAdjacentHTML('beforeEnd', styleHTML)
+  };
+
   window.addEventListener('DOMContentLoaded', () => {
-    deferredStyles.forEach(style => document.head.insertAdjacentHTML('beforeEnd', `<link rel="stylesheet" type="text/css" href="${style.path}" media="${style.media}">`))
+    deferredStyles.screen.forEach(style => addStyleSheetToHead(style, 'screen'));
+    deferredStyles.screen_md.forEach(style => addStyleSheetToHead(style, `screen and (min-width: ${breakPoints.md})`));
+    deferredStyles.screen_lg.forEach(style => addStyleSheetToHead(style, `screen and (min-width: ${breakPoints.lg})`));
+    addStyleSheetToHead(deferredStyles.theme_dark, 'screen and (prefers-color-scheme: dark)');
+    addStyleSheetToHead(deferredStyles.theme_print, 'print');
   });
 })();
