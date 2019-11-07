@@ -9,18 +9,21 @@ let workingHours = 0;
 let totalHours = 0;
 let monthlySalary = 0;
 
-const heading = document.querySelector('h1');
+const heading = document.querySelector('.t-header__title');
 const nameField = document.querySelector('#TTNameSurname');
 const salaryField = document.querySelector('#TTHourlyWage');
 const appOutput = document.querySelector('#TTHours');
 const monthlySalaryOutput = document.querySelector('#TTMonthlySalary');
-const scrollContainer = document.querySelector('.tt-c-scrollContainer');
+const scrollContainer = document.querySelector('.t-c-scrollContainer');
 const ttDialog = document.querySelector('dialog');
-const openDialogButton = document.querySelector('button.tt-button--opendialog');
-const closeDialogButton = document.querySelector('button.tt-button--closedialog');
+const openDialogButton = document.querySelector('#TTOpenTimeDialog');
+const closeDialogButton = document.querySelector('#TTCloseTimeDialog');
 const ttForm = document.querySelector('dialog form');
 const clearButton = document.querySelector('#clearButton');
-const addButton = document.querySelector('button.tt-button--add');
+const addButton = document.querySelector('#TTAddTime');
+const printButton = document.querySelector('#TTPrintButton');
+const tableBody = document.querySelector('table').tBodies[0];
+
 
 const totalTimestamp = value => value.endTime - value.startTime - value.breakDuration;
 const toHoursOfDay = value => parseFloat((totalTimestamp(value) / 1000 / 60 / 60).toFixed(2));
@@ -36,52 +39,62 @@ const msToHHMM = (ms) => {
     let hours = min / 60;
     let hh = Math.floor(min / 60);
     let mm = Math.round((hours - hh) * 60);
-  
+
     hh = String(hh).padStart(2, "0");
     mm = String(mm).padStart(2, "0");
     return hh + ":" + mm
 }
 
-const calculate = () => { 
+const calculate = () => {
     monthlySalary = (totalHours * model.salary).toLocaleString("de-DE", {style: "currency", currency: "EUR", minimumFractionDigits: 2});
 };
 
 const convertListIntoTable = (acc, value) => {
-    const totalms = totalTimestamp(value)
-    const hours = msToHHMM(totalms)
-    return `${acc}<tr><td>${value.day}</td><td>${hours} Hours</td></tr>`
+    const totalms = totalTimestamp(value);
+    const hours = msToHHMM(totalms);
+    const start = msToHHMM(value.startTime);
+    const end = msToHHMM(value.endTime);
+    const breakTime = msToHHMM(value.breakDuration);
+    return `${acc}
+      <tr>
+        <td>${value.day}</td>
+        <td>${start}</td>
+        <td>${end}</td>
+        <td>${breakTime}</td>
+        <td>${hours}</td>
+      </tr>`;
 }
 
-const saveModelToLocalStorage = () => localStorage.setItem('myData', JSON.stringify(model));
+const saveModelToLocalStorage = () => {
+  localStorage.setItem('myData', JSON.stringify(model))
+};
 
 const render = (model) => {
-    const tableHTMLString = model.list.reduce(convertListIntoTable, '<table><tbody>') + '</tbody></table>';
+    const tableHTMLString = model.list.reduce(convertListIntoTable, '');
     if(model.list.length > 0) {
         totalHours = allHours(model.list);
-        workingHours = allHoursOutput(model.list)
+        workingHours = allHoursOutput(model.list);
     } else {
         totalHours = 0;
         workingHours = 0;
     }
-    console.log(totalHours, workingHours)
     calculate();
 
-    heading.innerText = `${model.company} Time Sheet ${model.name}`;
-    nameField.value = model.name
-    salaryField.value = model.salary
-    appOutput.innerText = `${workingHours} Hours`;
+    heading.innerText = model.name;
+    nameField.value = model.name;
+    salaryField.value = model.salary;
+    appOutput.innerText = workingHours;
     monthlySalaryOutput.innerText = monthlySalary;
 
-    scrollContainer.innerHTML = tableHTMLString;
+    tableBody.innerHTML = tableHTMLString;
 };
 
-const getBreakDuration = () => ttForm.elements.TTBreak.valueAsNumber;
+const getBreakDuration = () => ttForm.elements.TTBreak.valueAsNumber * 60 * 1000;
 const getStartTime = () => ttForm.elements.TTStartTime.valueAsNumber;
 const getEndTime = () => ttForm.elements.TTEndTime.valueAsNumber;
 
 const onDialogClosed = () => {
     const returnValue = ttDialog.returnValue;
-    console.log(`Dialog was closed with ${returnValue}.`);
     if (returnValue !== 'add') {
         return;
     }
@@ -98,11 +111,15 @@ const onDialogClosed = () => {
         breakDuration
     };
 
-    console.log('Adding new timetable entry.', newEntry);
 
     model.list.push(newEntry);
+    model.list.sort((a,b) => {
+      if(a.day < b.day) return -1;
+      if(a.day > b.day) return 1;
+      if(a.day === b.day) return 0;
+    })
+    ttDialog.returnValue = ''; // reset to avoid 'add'-state with next opening
     saveModelToLocalStorage();
-
     render(model);
 };
 
@@ -111,7 +128,6 @@ const onNameFieldChanged = (event) => {
     model.name = newName;
 
     saveModelToLocalStorage();
-    console.log(`name field was changed to ${newName}`);
     render(model);
 };
 
@@ -120,7 +136,6 @@ const onSalaryFieldChanged = (event) => {
     model.salary = newSalary;
 
     saveModelToLocalStorage();
-    console.log(`salary field was changed to ${newSalary}`);
     render(model);
 };
 
@@ -162,13 +177,10 @@ const onAddButtonClicked = (event) => {
         return;
     }
 
-    if (window.confirm('Are you sure your data makes sense?') == false) {
-        event.preventDefault();
-    }
+    ttDialog.returnValue = 'add'; // polyfill isn't handling returnValues correctly. It must be set here!
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Hello, Mister Spex!');
     const myData = localStorage.getItem('myData')
 
     if(myData !== null) {
@@ -177,13 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     nameField.addEventListener('keyup', onNameFieldChanged);
     salaryField.addEventListener('keyup', onSalaryFieldChanged);
-    openDialogButton.addEventListener('click', () => {
-        ttDialog.showModal();
-    });
+    openDialogButton.addEventListener('click', () => ttDialog.showModal());
     closeDialogButton.addEventListener('click', () => ttDialog.close());
     ttDialog.addEventListener('close', onDialogClosed);
     clearButton.addEventListener('click', onClearButtonClicked);
     addButton.addEventListener('click', onAddButtonClicked);
+    printButton.addEventListener('click', () => window.print())
 
     render(model);
 });
