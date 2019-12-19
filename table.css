@@ -1,0 +1,112 @@
+/*
+Table
+
+A simple table with even-odd row highlighting. No class. No modifier.
+
+Markup:
+<table>
+  <caption>Headline</caption>
+  <thead>
+    <tr>
+      <th>Column Heading 1</th>
+      <th>Column Heading 2</th>
+      <th>Column Heading 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Row 1, Column 1</td>
+      <td>Row 1, Column 2</td>
+      <td>Row 1, Column 3</td>
+    </tr>
+    <tr>
+      <td>Row 2, Column 1</td>
+      <td>Row 2, Column 2</td>
+      <td>Row 2, Column 3</td>
+    </tr>
+    <tr>
+      <td>Row 3, Column 1</td>
+      <td>Row 3, Column 2</td>
+      <td>Row 3, Column 3</td>
+    </tr>
+    <tr>
+      <td>Row 4, Column 1</td>
+      <td>Row 4, Column 2</td>
+      <td>Row 4, Column 3</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2">Footer Column 1 / Row Header</th>
+      <td>Footer Column 3</td>
+    </tr>
+  </tfoot>
+</table>
+
+Styleguide Components.Table
+*/
+/* Setup */
+table {
+  --table\borderColor: var(--🌐color-text--decent, transparent);
+  --table\borderWidth: 1px;
+  --table\fontSize: var(--🌐fontSize--sm);
+  --table\width: 100%;
+  --table__tr\highlightColor: var(--🌐color-background--highlight);
+  --table__td\padding: var(--🌐spacing--sm);
+}
+
+/* Layout and design */
+table {
+  border-collapse: collapse;
+  width: var(--table\width);
+}
+  caption {
+    font-size: var(--🌐fontSize--xl);
+    font-weight: var(--🌐fontWeight);
+    line-height: var(--🌐fontSize--xl-lineHeight);
+    text-align: left;
+    padding: var(--🌐spacing--sm);
+  }
+
+  th {
+    letter-spacing: var(--🌐letterSpacing--lg);
+  }
+
+  tr { border-bottom: solid var(--table\borderWidth) var(--table\borderColor); }
+    tr:first-child { border-top: solid var(--table\borderWidth) var(--table\borderColor); }
+    tr:nth-child(even) { background-color: var(--table__tr\highlightColor); }
+
+  tbody tr td:last-child::after {
+    content: url(../../time-table.html#icon_more_vert);
+    font-size: var(--table\fontSize);
+    height: 38px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 24px;
+  }
+
+  td, th {
+    border-right: solid var(--table\borderWidth) var(--table\borderColor);
+    padding: var(--table__td\padding);
+    text-align: center;
+  }
+    td:last-child,
+    th:last-child { border-right: 0;}
+
+  tfoot th {
+    text-align: end;
+  }
+
+  .t-table__action {
+    background: #fff;
+    box-shadow: 0 2px 5px 0 #aaa;
+    width: auto;
+    height: auto;
+    display: none;
+    grid-auto-flow: column;
+    /* grid-gap: var(--🌐spacing--sm); */
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
