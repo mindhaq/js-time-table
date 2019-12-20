@@ -25,7 +25,11 @@ const clearButton = document.querySelector('#clearButton');
 const addButton = document.querySelector('#TTAddTime');
 const printButton = document.querySelector('#TTPrintButton');
 const tableBody = document.querySelector('table').tBodies[0];
-
+const ttAction = document.querySelector('.t-table__action');
+const ttDeleteEntry = document.querySelector('#TTDeleteEntry');
+const ttEditEntry = document.querySelector('#TTEditEntry');
+const ttDownloadData = document.querySelector('#TTDownloadData');
+const ttUploadData = document.querySelector('#TTUploadData');
 
 const totalTimestamp = value => value.endTime - value.startTime - value.breakDuration;
 const toHoursOfDay = value => parseFloat((totalTimestamp(value) / 1000 / 60 / 60).toFixed(2));
@@ -47,7 +51,7 @@ const msToHHMM = (ms) => {
 
   hh = String(hh).padStart(2, "0");
   mm = String(mm).padStart(2, "0");
-  return hh + ":" + mm
+  return hh + ":" + mm;
 }
 
 const calculate = () => {
@@ -62,11 +66,11 @@ const convertListIntoTable = (acc, value) => {
   const breakTime = msToHHMM(value.breakDuration);
   return `${acc}
       <tr>
-        <td class="t-editEntry">${value.day}</td>
+        <td>${value.day}</td>
         <td>${start}</td>
         <td>${end}</td>
         <td>${breakTime}</td>
-        <td class="t-deleteEntry">${hours}</td>
+        <td class="t-entryAction">${hours}</td>
       </tr>`;
 }
 
@@ -79,8 +83,8 @@ const sortByDay = () => {
 };
 
 const saveModelToLocalStorage = () => {
-  sortByDay(model)
-  localStorage.setItem('myData', JSON.stringify(model))
+  sortByDay(model);
+  localStorage.setItem('myData', JSON.stringify(model));
 };
 
 const render = (model) => {
@@ -104,34 +108,46 @@ const render = (model) => {
 
   tableRows = document.querySelectorAll("tbody > tr");
   tableRows.forEach(tableRow => {
-    const index = tableRow.rowIndex - 1
-    tableRow.addEventListener('click', () => onEntryClicked(index))
+    tableRow.addEventListener('click', onEntryClicked);
   });
 };
 
-const onEntryClicked = (index) => {
-  const elementClass = event.target.classList
-  // console.log(elementClass)
+const onEntryClicked = () => {
+  const elementClass = event.target.classList;
+  const index = event.target.parentElement.rowIndex - 1;
 
-  if (elementClass == '') {
+  if (elementClass.contains('t-entryAction')) {
+    ttAction.style.top = event.target.offsetHeight + event.target.offsetTop + 'px';
+    ttAction.style.display = 'grid';
+    indexOfEntry = index;
+  } else {
+    ttAction.style.display = 'none';
+    indexOfEntry = undefined;
+  }
+}
+
+const onDeleteEntryClicked = () => {
+  if (indexOfEntry == undefined) {
     return
   }
-  if (elementClass.contains('t-deleteEntry')) {
-    model.list.splice(index, 1);
-  }
-  if (elementClass.contains('t-editEntry')) {
-    indexOfEntry = index;
-    ttForm.elements.TTDay.value = model.list[index].day;
-    ttForm.elements.TTStartTime.valueAsNumber = model.list[index].startTime;
-    ttForm.elements.TTEndTime.valueAsNumber = model.list[index].endTime;
-    ttForm.elements.TTBreak.valueAsNumber = model.list[index].breakDuration / 60 / 1000;
-
-    ttDialog.classList.add('editMode')
-    ttDialog.showModal();
-  }
-
+  model.list.splice(indexOfEntry, 1);
+  ttAction.style.display = 'none';
   saveModelToLocalStorage();
   render(model);
+}
+
+const onEditEntryClicked = () => {
+  if (indexOfEntry == undefined) {
+    return
+  }
+  ttForm.elements.TTDay.value = model.list[indexOfEntry].day;
+  ttForm.elements.TTStartTime.valueAsNumber = model.list[indexOfEntry].startTime;
+  ttForm.elements.TTEndTime.valueAsNumber = model.list[indexOfEntry].endTime;
+  ttForm.elements.TTBreak.valueAsNumber = model.list[indexOfEntry].breakDuration / 60 / 1000;
+
+  ttDialog.classList.add('editMode')
+  ttDialog.showModal();
+  ttAction.style.display = 'none';
 }
 
 const onDialogClosed = () => {
@@ -145,6 +161,7 @@ const onDialogClosed = () => {
   if (returnValue === 'edit' && indexOfEntry != undefined) {
     model.list.splice(indexOfEntry, 1);
   }
+
   const day = ttForm.elements.TTDay.value;
   const breakDuration = getBreakDuration();
   const startTime = getStartTime();
@@ -219,6 +236,32 @@ const onAddButtonClicked = (event) => {
   ttDialog.returnValue = 'add'; // polyfill isn't handling returnValues correctly. It must be set here!
 };
 
+// no error handling included (e.g. empty file)
+const onDownloadDataClicked = () => {
+  const myData = localStorage.getItem('myData')
+  ttDownloadData.setAttribute('href', 'data:text/plain,' + myData)
+}
+
+const onUploadDataClicked = () => {
+  const fileLoader = document.querySelector('#FileLoader');
+  fileLoader.onchange = saveFileToLocalstorage;
+  fileLoader.click();
+}
+
+const saveFileToLocalstorage = () => {
+  const reader = new FileReader();
+  reader.onload = handleFileRead;
+
+  const file = event.target.files[0];
+  reader.readAsText(file); // fires onload when done.
+}
+
+const handleFileRead = (event) => {
+  model = JSON.parse(event.target.result);
+  saveModelToLocalStorage();
+  render(model);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const myData = localStorage.getItem('myData')
 
@@ -233,7 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
   ttDialog.addEventListener('close', onDialogClosed);
   clearButton.addEventListener('click', onClearButtonClicked);
   addButton.addEventListener('click', onAddButtonClicked);
-  printButton.addEventListener('click', () => window.print())
+  printButton.addEventListener('click', () => window.print());
+  ttDeleteEntry.addEventListener('click', onDeleteEntryClicked);
+  ttEditEntry.addEventListener('click', onEditEntryClicked);
+  ttDownloadData.addEventListener('click', onDownloadDataClicked);
+  ttUploadData.addEventListener('click', onUploadDataClicked);
 
   render(model);
 });
